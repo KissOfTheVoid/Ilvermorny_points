@@ -1,0 +1,53 @@
+/* Стили для staff_actions.html */
+
+/* Общие стили страницы */
+#staff-actions-container {
+    width: 80%;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+/* Стили для формы ввода */
+#staff-actions-container input[type="text"] {
+    width: 90%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* Стили для кнопки */
+#staff-actions-container button {
+    width: 90%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#staff-actions-container button:hover {
+    background-color: #45a049;
+}
+
+/* Стили для таблицы */
+#transactions-log {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+#transactions-log th, #transactions-log td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+#transactions-log th {
+    background-color: #f2f2f2;
+}

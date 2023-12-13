@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ильверморни Система Баллов</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style_pre_alpha.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>Ильверморни Система Баллов</h2>
+        <label for="wizard-name">Имя волшебника:</label>
+        <input type="text" id="wizard-name" placeholder="Введите имя и фамилию">
+
+        <label for="faculty-select">Факультет:</label>
+        <select id="faculty-select">
+            <!-- Здесь будут добавлены факультеты -->
+        </select>
+
+        <div class="button-container">
+            <div class="button-row">
+                <button class="minus-15" onclick="changePoints(-15)">-15</button>
+                <button class="plus-15" onclick="changePoints(15)">+15</button>
+            </div>
+            <div class="button-row">
+                <button class="minus-10" onclick="changePoints(-10)">-10</button>
+                <button class="plus-10" onclick="changePoints(10)">+10</button>
+            </div>
+            <div class="button-row">
+                <button class="minus-5" onclick="changePoints(-5)">-5</button>
+                <button class="plus-5" onclick="changePoints(5)">+5</button>
+            </div>
+            <div class="button-row">
+                <button class="minus-1" onclick="changePoints(-1)">-1</button>
+                <button class="plus-1" onclick="changePoints(1)">+1</button>
+            </div>
+        </div>
+
+        <div id="faculty-points-display" class="faculty-points">
+            <!-- Здесь будут отображаться баллы факультетов -->
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='scripts_pre_alpha_v1.0.js') }}"></script>
+</body>
+</html>

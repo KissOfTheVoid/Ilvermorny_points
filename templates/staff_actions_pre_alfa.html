@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Действия персонала</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='staff_actions_styles_pre_alpha.css') }}"> <!-- Ссылка на CSS -->
+</head>
+<body>
+    <div id="staff-actions-container">
+        <h2>Лог действий волшебников</h2>
+        <input type="text" id="wizard-name" placeholder="Имя волшебника">
+        <input type="text" id="wizard-surname" placeholder="Фамилия волшебника">
+        <button onclick="loadTransactions()">Показать лог</button>
+        <button onclick="exportTransactions()">Скачать лог в формате XLSX</button>
+
+        <table id="transactions-log">
+            <thead>
+                <tr>
+                    <th>Дата</th>
+                    <th>Факультет</th>
+                    <th>Очки</th>
+                    <th>Отправитель</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Данные будут добавлены здесь -->
+            </tbody>
+        </table>
+    </div>
+
+    <script src="{{ url_for('static', filename='scripts_pre_alpha_v1.0.js') }}"></script> <!-- Подключение JavaScript -->
+</body>
+</html>

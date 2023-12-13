@@ -1,0 +1,146 @@
+/* Основные стили для всего сайта */
+body {
+    font-family: Arial, sans-serif; /* Установка основного шрифта */
+    margin: 0; /* Убираем отступы */
+    padding: 0; /* Убираем внутренние отступы */
+    background: #f7f7f7; /* Цвет фона для всей страницы */
+    display: flex; /* Используем flexbox для центрирования контента */
+    justify-content: center; /* Горизонтальное центрирование */
+    align-items: center; /* Вертикальное центрирование */
+    text-align: center;
+    min-height: 100vh; /* Минимальная высота, равная высоте вьюпорта */
+}
+
+/* Стилизация основного контейнера */
+.container {
+    width: 90%; /* Ширина контейнера - 90% от ширины экрана */
+    max-width: 300px; /* Максимальная ширина для мобильных устройств */
+    margin: auto; /* Автоматические отступы для центрирования */
+    padding: 20px; /* Внутренние отступы */
+    background-color: #fff; /* Белый фон контейнера */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Тень вокруг контейнера */
+    border-radius: 10px; /* Скругленные углы */
+}
+
+/* Стили для элементов формы */
+select, input[type="text"] {
+    width: 90%; /* Занимает всю ширину контейнера */
+    padding: 10px; /* Внутренние отступы */
+    margin-bottom: 15px; /* Отступ снизу */
+    border: 1px solid #ddd; /* Граница */
+    border-radius: 4px; /* Скругленные углы */
+}
+
+/* Стили для контейнера кнопок и строк кнопок */
+.button-container {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.button-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0; /* Убираем промежуток между кнопками */
+    justify-content: space-between;
+}
+
+/* Стилизация кнопок */
+.button-row button {
+    flex-basis: calc(50% - 4px); /* Учитываем отступы между кнопками */
+    height: calc(50vw / 2 - 4px); /* Высота кнопки будет равна ширине, деленной на 2, минус отступы */
+    margin: 2px; /* Устанавливаем минимальный отступ */
+    border-radius: 0; /* Убираем скругление углов */
+}
+
+/* Индивидуальные стили для кнопок */
+.minus-15 { background-color: #ff0000; } /* -15 (красный) */
+.plus-15 { background-color: #00ff00; } /* 15 (зеленый) */
+.minus-10 { background-color: #ff6e6e; } /* -10 (красный, менее яркий) */
+.plus-10 { background-color: #6efa6e; } /* 10 (зеленый, менее яркий) */
+.minus-5 { background-color: #ff8e8e; } /* -5 (красный, менее яркий) */
+.plus-5 { background-color: #8efa8e; } /* 5 (зеленый, менее яркий) */
+.minus-1 { background-color: #ffaeae; } /* -1 (красный, менее яркий) */
+.plus-1 { background-color: #aefaae; } /* 1 (зеленый, менее яркий) */
+
+
+/* Эффект прозрачности при наведении */
+button:hover {
+    opacity: 0.8;
+}
+
+/* Стилизация блока для отображения баллов факультетов */
+.faculty-points {
+    margin-top: 20px;
+}
+
+/* Стилизация отдельного элемента факультета */
+.faculty {
+    margin-bottom: 10px;
+}
+
+/* Добавленные стили для нового отображения баллов */
+.faculty-container {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+    background-color: #f8f8f8; /* Цвет фона для контейнера факультета */
+}
+
+.faculty-name {
+    font-size: 1.2em;
+    margin-bottom: 5px;
+}
+
+.faculty-points {
+    font-size: 2em;
+    font-weight: bold;
+    color: #333;
+}
+/* Медиазапросы для адаптации под разные размеры экранов */
+@media (min-width: 768px) {
+    .container {
+        max-width: 600px; /* Увеличиваем максимальную ширину на планшетах */
+    }
+}
+
+@media (min-width: 992px) {
+    .container {
+        max-width: 700px; /* Увеличиваем максимальную ширину на настольных ПК */
+    }
+}
+
+@media (min-width: 1200px) {
+    .container {
+        max-width: 900px; /* Увеличиваем максимальную ширину на больших настольных ПК */
+    }
+}
+/* Медиазапросы для адаптации контейнера с кнопками под разные размеры экранов */
+@media (min-width: 768px) {
+    .button-container {
+        justify-content: space-between; /* Равномерное распределение кнопок на планшетах и более широких экранах */
+    }
+}
+
+@media (min-width: 992px) {
+    .button-container {
+        max-width: 700px; /* Увеличиваем максимальную ширину контейнера с кнопками на настольных ПК */
+    }
+}
+
+@media (min-width: 1200px) {
+    .button-container {
+        max-width: 900px; /* Увеличиваем максимальную ширину контейнера с кнопками на больших настольных ПК */
+    }
+}
+
+
+/* Медиазапрос для мобильных устройств */
+@media (max-width: 767px) {
+    .button-row button {
+        flex-basis: calc(50% - 4px); /* Устанавливаем базовую ширину */
+        height: calc(50vw / 2 - 4px); /* Устанавливаем высоту кнопок */
+        margin: 2px; /* Устанавливаем отступ */
+    }
+}

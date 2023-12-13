@@ -1,0 +1,22 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredPackages">
+        <value>
+          <list size="9">
+            <item index="0" class="java.lang.String" itemvalue="emotion-recognition" />
+            <item index="1" class="java.lang.String" itemvalue="sinet" />
+            <item index="2" class="java.lang.String" itemvalue="pose" />
+            <item index="3" class="java.lang.String" itemvalue="closed-eyes" />
+            <item index="4" class="java.lang.String" itemvalue="base-model" />
+            <item index="5" class="java.lang.String" itemvalue="mobilefacenet" />
+            <item index="6" class="java.lang.String" itemvalue="blur-detection" />
+            <item index="7" class="java.lang.String" itemvalue="transition-detector" />
+            <item index="8" class="java.lang.String" itemvalue="yolov4" />
+          </list>
+        </value>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>
