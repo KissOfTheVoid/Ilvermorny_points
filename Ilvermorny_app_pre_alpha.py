@@ -159,6 +159,7 @@ def add_points():
         update_query = "UPDATE faculties SET {} = {} + %s, total_points = total_points + %s WHERE id = %s"
         if operation == 'subtract':
             update_query = "UPDATE faculties SET {} = {} - %s, total_points = total_points - %s WHERE id = %s"
+            points = points * (-1)
         cursor.execute(update_query.format(points_type, points_type), (points, points, faculty_id))
 
         app.logger.info(
