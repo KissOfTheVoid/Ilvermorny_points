@@ -50,6 +50,7 @@ function changePoints(points) {
     const fullName = document.getElementById('wizard-name').value.trim();
     const facultyId = document.getElementById('faculty-select').value;
     const nameParts = fullName.split(' ');
+    const pointsType = document.getElementById('points-type-select').value;
     if (!fullName || nameParts.length !== 2) {
         alert('Пожалуйста, введите полное имя волшебника (имя и фамилия).');
         return;
@@ -64,6 +65,7 @@ function changePoints(points) {
         body: JSON.stringify({
             faculty_id: facultyId,
             points: Math.abs(points),
+            points_type: pointsType, // Добавление типа баллов в запрос
             sender_name: senderName,
             sender_surname: senderSurname,
             operation: operation
@@ -80,7 +82,6 @@ function changePoints(points) {
     })
     .catch(error => console.error('Ошибка:', error));
 }
-
 
 function loadTransactions() {
     const name = document.getElementById('wizard-name').value;
@@ -102,13 +103,24 @@ function loadTransactions() {
                 row.insertCell(0).textContent = trans.timestamp;
                 row.insertCell(1).textContent = trans.faculty_name;
                 row.insertCell(2).textContent = trans.points;
-                row.insertCell(3).textContent = trans.sender_name + ' ' + trans.sender_surname;
+                row.insertCell(3).textContent = translatePointsType(trans.points_type); // Перевод на русский
+                row.insertCell(4).textContent = trans.sender_name + ' ' + trans.sender_surname;
             });
         })
         .catch(error => {
             console.error('Ошибка:', error);
-            alert(error.message);  // Отображение сообщения об ошибке
+            alert(error.message);
         });
+}
+
+function translatePointsType(type) {
+    const types = {
+        'courage': 'Смелость',
+        'resourcefulness': 'Находчивость',
+        'kindness': 'Доброта',
+        'sports': 'Спорт'
+    };
+    return types[type] || type; // Возвращает перевод или оригинальное значение, если перевода нет
 }
 
 
