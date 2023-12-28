@@ -343,6 +343,17 @@ def export_transactions():
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
 
+@app.route('/get_users')
+def get_users():
+    conn_string = f"dbname={DB_NAME} user={DB_USER} password={DB_PASSWORD}"
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    cursor.execute("SELECT DISTINCT sender_name, sender_surname FROM points_transactions")
+    users = cursor.fetchall()
+    cursor.close()
+    return jsonify(users)
+
+
 @app.route('/')
 def index():
     return render_template('Ilvermorny_front_pre_alpha.html')

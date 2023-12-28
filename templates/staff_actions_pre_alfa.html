@@ -2,13 +2,16 @@
 <html>
 <head>
     <title>Действия персонала</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='staff_actions_styles_pre_alpha.css') }}"> <!-- Ссылка на CSS -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style_pre_alpha.css') }}"> <!-- Ссылка на CSS -->
 </head>
 <body>
     <div id="staff-actions-container">
         <h2>Лог действий волшебников</h2>
-        <input type="text" id="wizard-name" placeholder="Имя волшебника">
-        <input type="text" id="wizard-surname" placeholder="Фамилия волшебника">
+        <label for="wizard-select">Выберите волшебника:</label>
+        <select id="wizard-select" name="wizard">
+            <option value="">--Выберите волшебника--</option>
+            <!-- Опции будут добавлены динамически -->
+        </select>
         <button onclick="loadTransactions()">Показать лог</button>
         <button onclick="exportTransactions()">Скачать лог в формате XLSX</button>
 

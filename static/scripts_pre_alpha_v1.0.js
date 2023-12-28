@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     loadFaculties();
     updateFacultyPoints();
+    loadUsers();
 });
 
 function loadFaculties() {
@@ -84,10 +85,15 @@ function changePoints(points) {
 }
 
 function loadTransactions() {
-    const name = document.getElementById('wizard-name').value;
-    const surname = document.getElementById('wizard-surname').value;
+    const selectedWizard = document.getElementById('wizard-select').value;
+    const [name, surname] = selectedWizard.split(' ');
 
-    fetch(`/get_transactions_by_wizard?name=${name}&surname=${surname}`)
+    if (!selectedWizard || name.length === 0 || surname.length === 0) {
+        alert('Пожалуйста, выберите волшебника из списка.');
+        return;
+    }
+
+    fetch(`/get_transactions_by_wizard?name=${encodeURIComponent(name)}&surname=${encodeURIComponent(surname)}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Волшебник не найден');
@@ -103,7 +109,7 @@ function loadTransactions() {
                 row.insertCell(0).textContent = trans.timestamp;
                 row.insertCell(1).textContent = trans.faculty_name;
                 row.insertCell(2).textContent = trans.points;
-                row.insertCell(3).textContent = translatePointsType(trans.points_type); // Перевод на русский
+                row.insertCell(3).textContent = translatePointsType(trans.points_type);
                 row.insertCell(4).textContent = trans.sender_name + ' ' + trans.sender_surname;
             });
         })
@@ -125,37 +131,54 @@ function translatePointsType(type) {
 
 
 function exportTransactions() {
-    const name = document.getElementById('wizard-name').value;
-    const surname = document.getElementById('wizard-surname').value;
+    const selectedWizard = document.getElementById('wizard-select').value;
+    const [name, surname] = selectedWizard.split(' ');
 
-    if (!name || !surname) {
-        alert('Пожалуйста, введите имя и фамилию волшебника.');
+    if (!selectedWizard || name.length === 0 || surname.length === 0) {
+        alert('Пожалуйста, выберите волшебника из списка.');
         return;
     }
 
-    fetch(`/export_transactions?name=${name}&surname=${surname}`)
+    fetch(`/export_transactions?name=${encodeURIComponent(name)}&surname=${encodeURIComponent(surname)}`)
         .then(response => {
-            if (response.ok) {
-                return response.blob();
-            } else {
+            if (!response.ok) {
                 return response.json().then(json => {
                     throw new Error(json.message);
                 });
             }
+            return response.blob();
         })
         .then(blob => {
-            // Создание ссылки для скачивания файла
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.style.display = 'none';
             a.href = url;
+            // Предполагаем, что name и surname корректно кодируются для использования в имени файла
             a.download = `transactions_${name}_${surname}.xlsx`;
             document.body.appendChild(a);
             a.click();
             window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
         })
         .catch(error => {
             alert(error.message); // Отображение сообщения об ошибке
         });
+}
+
+function loadUsers() {
+    fetch('/get_users')
+        .then(response => response.json())
+        .then(users => {
+            const select = document.getElementById('wizard-select');
+            select.innerHTML = '<option value="">--Выберите волшебника--</option>';
+            users.forEach(user => {
+                const option = document.createElement('option');
+                // Используйте индексы массива, если сервер возвращает массив массивов
+                option.value = `${user[0]} ${user[1]}`;
+                option.text = `${user[0]} ${user[1]}`;
+                select.appendChild(option);
+            });
+        })
+        .catch(error => console.error('Ошибка при загрузке пользователей:', error));
 }
 
