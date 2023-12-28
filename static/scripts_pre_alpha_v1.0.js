@@ -1,16 +1,24 @@
+// Событие, вызываемое после полной загрузки DOM
 document.addEventListener('DOMContentLoaded', function() {
-    loadFaculties();
-    updateFacultyPoints();
-    loadUsers();
-     // Добавляем новый обработчик для выпадающего списка факультетов
+    loadFaculties(); // Загрузка списка факультетов
+    updateFacultyPoints(); // Обновление баллов факультетов
+    loadUsers(); // Загрузка пользователей
+
+    // Добавляем обработчик для изменения выбранного факультета
     document.getElementById('faculty-select').addEventListener('change', function() {
-        // Вызываем новую функцию для загрузки баллов выбранного факультета
-        loadSelectedFacultyPoints(this.value);
+        loadSelectedFacultyPoints(this.value); // Загрузка баллов выбранного факультета
     });
 });
 
+// Заголовки для всех запросов
+const headers = {
+    'Content-Type': 'application/json',
+    'X-Custom-Security-Header': CUSTOM_HEADER_VALUE // Заголовок для безопасности
+};
+
+// Функция для загрузки списка факультетов
 function loadFaculties() {
-    fetch('/faculties')
+    fetch('/faculties', { headers: headers })
         .then(response => response.json())
         .then(data => {
             const select = document.getElementById('faculty-select');
@@ -30,8 +38,9 @@ function loadFaculties() {
         .catch(error => console.error('Ошибка:', error));
 }
 
+// Функция для обновления баллов факультетов
 function updateFacultyPoints() {
-    fetch('/get_faculty_points')
+    fetch('/get_faculty_points', { headers: headers })
         .then(response => response.json())
         .then(data => {
             const pointsContainer = document.getElementById('faculty-points-display');
@@ -57,26 +66,44 @@ function updateFacultyPoints() {
         .catch(error => console.error('Error:', error));
 }
 
+// Функция для загрузки баллов выбранного факультета
+function loadSelectedFacultyPoints(facultyId) {
+    if (!facultyId) return; // Если ID факультета не выбран, ничего не делаем
+
+    fetch(`/get_faculty_points_by_id/${facultyId}`, { headers: headers })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('faculty-name').textContent = data.name;
+            document.getElementById('total-points').textContent = data.total_points;
+            document.getElementById('courage-points').textContent = data.courage;
+            document.getElementById('resourcefulness-points').textContent = data.resourcefulness;
+            document.getElementById('kindness-points').textContent = data.kindness;
+            document.getElementById('sports-points').textContent = data.sports;
+        })
+        .catch(error => console.error('Ошибка:', error));
+}
+// Функция для изменения баллов
 function changePoints(points) {
     const fullName = document.getElementById('wizard-name').value.trim();
     const facultyId = document.getElementById('faculty-select').value;
     const nameParts = fullName.split(' ');
     const pointsType = document.getElementById('points-type-select').value;
+
     if (!fullName || nameParts.length !== 2) {
         alert('Пожалуйста, введите полное имя волшебника (имя и фамилия).');
         return;
     }
-    const [senderName, senderSurname] = nameParts;
 
+    const [senderName, senderSurname] = nameParts;
     const operation = points >= 0 ? 'add' : 'subtract';
 
     fetch('/points', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: headers,
         body: JSON.stringify({
             faculty_id: facultyId,
             points: Math.abs(points),
-            points_type: pointsType, // Добавление типа баллов в запрос
+            points_type: pointsType,
             sender_name: senderName,
             sender_surname: senderSurname,
             operation: operation
@@ -94,6 +121,7 @@ function changePoints(points) {
     .catch(error => console.error('Ошибка:', error));
 }
 
+// Функция для загрузки транзакций
 function loadTransactions() {
     const selectedWizard = document.getElementById('wizard-select').value;
     const [name, surname] = selectedWizard.split(' ');
@@ -103,7 +131,7 @@ function loadTransactions() {
         return;
     }
 
-    fetch(`/get_transactions_by_wizard?name=${encodeURIComponent(name)}&surname=${encodeURIComponent(surname)}`)
+    fetch(`/get_transactions_by_wizard?name=${encodeURIComponent(name)}&surname=${encodeURIComponent(surname)}`, { headers: headers })
         .then(response => {
             if (!response.ok) {
                 throw new Error('Волшебник не найден');
@@ -129,6 +157,7 @@ function loadTransactions() {
         });
 }
 
+// Функция для перевода типа баллов
 function translatePointsType(type) {
     const types = {
         'courage': 'Смелость',
@@ -139,7 +168,7 @@ function translatePointsType(type) {
     return types[type] || type; // Возвращает перевод или оригинальное значение, если перевода нет
 }
 
-
+// Функция для экспорта транзакций
 function exportTransactions() {
     const selectedWizard = document.getElementById('wizard-select').value;
     const [name, surname] = selectedWizard.split(' ');
@@ -149,7 +178,7 @@ function exportTransactions() {
         return;
     }
 
-    fetch(`/export_transactions?name=${encodeURIComponent(name)}&surname=${encodeURIComponent(surname)}`)
+    fetch(`/export_transactions?name=${encodeURIComponent(name)}&surname=${encodeURIComponent(surname)}`, { headers: headers })
         .then(response => {
             if (!response.ok) {
                 return response.json().then(json => {
@@ -163,7 +192,6 @@ function exportTransactions() {
             const a = document.createElement('a');
             a.style.display = 'none';
             a.href = url;
-            // Предполагаем, что name и surname корректно кодируются для использования в имени файла
             a.download = `transactions_${name}_${surname}.xlsx`;
             document.body.appendChild(a);
             a.click();
@@ -171,41 +199,23 @@ function exportTransactions() {
             document.body.removeChild(a);
         })
         .catch(error => {
-            alert(error.message); // Отображение сообщения об ошибке
+            alert(error.message);
         });
 }
 
+// Функция для загрузки пользователей
 function loadUsers() {
-    fetch('/get_users')
+    fetch('/get_users', { headers: headers })
         .then(response => response.json())
         .then(users => {
             const select = document.getElementById('wizard-select');
             select.innerHTML = '<option value="">--Выберите волшебника--</option>';
             users.forEach(user => {
                 const option = document.createElement('option');
-                // Используйте индексы массива, если сервер возвращает массив массивов
                 option.value = `${user[0]} ${user[1]}`;
                 option.text = `${user[0]} ${user[1]}`;
                 select.appendChild(option);
             });
         })
         .catch(error => console.error('Ошибка при загрузке пользователей:', error));
-}
-
-// Эта функция будет вызываться при выборе факультета из выпадающего списка
-function loadSelectedFacultyPoints(facultyId) {
-    if (!facultyId) return; // Если ID факультета не выбран, ничего не делаем
-
-    fetch(`/get_faculty_points_by_id/${facultyId}`)
-        .then(response => response.json())
-        .then(data => {
-            // Обновляем информацию о баллах на странице
-            document.getElementById('faculty-name').textContent = data.name;
-            document.getElementById('total-points').textContent = data.total_points;
-            document.getElementById('courage-points').textContent = data.courage;
-            document.getElementById('resourcefulness-points').textContent = data.resourcefulness;
-            document.getElementById('kindness-points').textContent = data.kindness;
-            document.getElementById('sports-points').textContent = data.sports;
-        })
-        .catch(error => console.error('Ошибка:', error));
 }

@@ -3,11 +3,12 @@ import logging
 import os
 import subprocess
 from logging.handlers import RotatingFileHandler
+from functools import wraps
 
 import pandas as pd
 import psycopg2
 import yaml
-from flask import Flask, request, jsonify, render_template, send_file
+from flask import abort, Flask, request, jsonify, render_template, send_file
 from psycopg2 import sql, Error
 
 app = Flask(__name__)
@@ -32,6 +33,16 @@ with open("config.yaml", "r") as yamlfile:
 DB_NAME = cfg['database']['name']
 DB_USER = cfg['database']['user']
 DB_PASSWORD = cfg['database']['password']
+CUSTOM_HEADER_VALUE = cfg['security']['custom_header_value']
+
+
+def require_security_header(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if request.headers.get('X-Custom-Security-Header') != CUSTOM_HEADER_VALUE:
+            abort(403)  # Возвращает ошибку 403 Forbidden, если заголовок неверен
+        return f(*args, **kwargs)
+    return decorated_function
 
 
 def create_tables():
@@ -138,6 +149,7 @@ def restore_db_from_dump():
 
 
 @app.route('/points', methods=['POST'])
+@require_security_header
 def add_points():
     try:
         data = request.json
@@ -189,6 +201,7 @@ def add_points():
 
 
 @app.route('/faculties', methods=['GET'])
+@require_security_header
 def get_faculties():
     try:
         conn = psycopg2.connect(f"dbname={DB_NAME} user={DB_USER} password={DB_PASSWORD}")
@@ -204,6 +217,7 @@ def get_faculties():
 
 
 @app.route('/get_transactions', methods=['GET'])
+@require_security_header
 def get_transactions():
     try:
         conn = psycopg2.connect(f"dbname={DB_NAME} user={DB_USER} password={DB_PASSWORD}")
@@ -235,6 +249,7 @@ def get_transactions():
 
 
 @app.route('/get_faculty_points', methods=['GET'])
+@require_security_header
 def get_faculty_points():
     try:
         conn = psycopg2.connect(f"dbname={DB_NAME} user={DB_USER} password={DB_PASSWORD}")
@@ -255,6 +270,7 @@ def get_faculty_points():
 
 
 @app.route('/get_transactions_by_wizard')
+@require_security_header
 def get_transactions_by_wizard():
     name = request.args.get('name', '').strip()
     surname = request.args.get('surname', '').strip()
@@ -299,6 +315,7 @@ def get_transactions_by_wizard():
 
 
 @app.route('/export_transactions')
+@require_security_header
 def export_transactions():
     name = request.args.get('name', '').strip()
     surname = request.args.get('surname', '').strip()
@@ -344,6 +361,7 @@ def export_transactions():
 
 
 @app.route('/get_users')
+@require_security_header
 def get_users():
     conn_string = f"dbname={DB_NAME} user={DB_USER} password={DB_PASSWORD}"
     conn = psycopg2.connect(conn_string)
@@ -355,6 +373,7 @@ def get_users():
 
 
 @app.route('/get_faculty_points_by_id/<int:faculty_id>', methods=['GET'])
+@require_security_header
 def get_faculty_points_by_id(faculty_id):
     conn = psycopg2.connect(f"dbname={DB_NAME} user={DB_USER} password={DB_PASSWORD}")
     cursor = conn.cursor()
@@ -388,17 +407,17 @@ def get_faculty_points_by_id(faculty_id):
 
 @app.route('/')
 def index():
-    return render_template('Ilvermorny_front_pre_alpha.html')
+    return render_template('Ilvermorny_front_pre_alpha.html', custom_header_value=CUSTOM_HEADER_VALUE)
 
 
 @app.route('/display_points')
 def display_points():
-    return render_template('faculty_points_page.html')
+    return render_template('faculty_points_page.html', custom_header_value=CUSTOM_HEADER_VALUE)
 
 
 @app.route('/staff_actions')
 def staff_actions():
-    return render_template('staff_actions_pre_alfa.html')
+    return render_template('staff_actions_pre_alfa.html', custom_header_value=CUSTOM_HEADER_VALUE)
 
 
 if __name__ == '__main__':
