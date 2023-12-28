@@ -21,6 +21,11 @@ function loadFaculties() {
                 option.textContent = faculty.name;
                 select.appendChild(option);
             });
+            // Автоматическая загрузка данных для первого факультета
+            if (data.length > 0) {
+                select.value = data[0].id; // Устанавливаем первый факультет выбранным
+                loadSelectedFacultyPoints(data[0].id); // Загрузка данных для первого факультета
+            }
         })
         .catch(error => console.error('Ошибка:', error));
 }

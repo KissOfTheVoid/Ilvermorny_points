@@ -167,6 +167,29 @@ button:hover {
     border: 1px solid #ddd; /* Граница */
     padding: 10px; /* Внутренние отступы */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Тень для блоков */
+    border-radius: 15px; /* Добавляем скругление углов */
+    background-color: #ffffff; /* Устанавливаем стандартный цвет фона */
+}
+
+/* Уникальные фоны для блоков */
+.points-block.courage {
+    background-color: #FFD1D1; /* Пример цвета для блока Смелости */
+}
+
+.points-block.resourcefulness {
+    background-color: #D1D1FF; /* Пример цвета для блока Находчивости */
+}
+
+.points-block.kindness {
+    background-color: #D1FFD1; /* Пример цвета для блока Доброты */
+}
+
+.points-block.sports {
+    background-color: #FFF1D1; /* Пример цвета для блока Спорта */
+}
+
+.total-points {
+    background-color: #D1FFFF; /* Пример цвета для центрального блока */
 }
 
 /* Стили для блоков категорий баллов */
