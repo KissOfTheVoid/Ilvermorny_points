@@ -142,6 +142,60 @@ button:hover {
     opacity: 0.8;
 }
 
+
+/* Стили для страницы отображения баллов факультетов */
+.faculty-points-container {
+    width: 100%; /* Полная ширина */
+    padding: 20px; /* Внутренние отступы */
+    box-sizing: border-box; /* Чтобы padding не влиял на ширину */
+}
+
+.faculty-select-dropdown {
+    margin-bottom: 20px; /* Отступ снизу для выпадающего списка */
+}
+
+.points-grid {
+    display: grid; /* Использование grid для размещения блоков */
+    grid-template-columns: repeat(2, 1fr); /* Две колонки с равной шириной */
+    grid-template-rows: auto 1fr auto; /* Три строки: авто, 1fr и авто */
+    gap: 10px; /* Отступы между блоками */
+    margin-bottom: 20px; /* Отступ снизу для сетки */
+}
+
+.points-block {
+    background-color: #fff; /* Белый фон для блоков */
+    border: 1px solid #ddd; /* Граница */
+    padding: 10px; /* Внутренние отступы */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Тень для блоков */
+}
+
+/* Стили для блоков категорий баллов */
+.courage, .resourcefulness, .kindness, .sports {
+    grid-column: span 1; /* Каждый блок занимает одну колонку */
+}
+
+.total-points {
+    grid-column: span 2; /* Центральный блок занимает две колонки */
+    padding: 20px; /* Больше внутренних отступов */
+    font-size: 1.5em; /* Увеличенный размер шрифта */
+    text-align: center; /* Центрирование текста */
+}
+
+/* Стилизация заголовков в блоках */
+.points-block h3 {
+    margin: 0; /* Убираем отступы заголовков */
+    font-size: 1.2em; /* Размер шрифта для заголовков */
+    color: #333; /* Цвет текста */
+    margin-bottom: 5px; /* Отступ снизу для заголовка */
+}
+
+/* Стилизация параграфов в блоках */
+.points-block p {
+    font-size: 2em; /* Увеличенный размер шрифта для чисел */
+    margin: 0; /* Убираем отступы параграфов */
+}
+
+
 /* Медиазапросы для адаптации под разные размеры экранов */
 @media (min-width: 768px) {
     .container {
@@ -186,5 +240,11 @@ button:hover {
         flex-basis: calc(50% - 4px); /* Устанавливаем базовую ширину */
         height: calc(50vw / 2 - 4px); /* Устанавливаем высоту кнопок */
         margin: 2px; /* Устанавливаем отступ */
+    }
+    .points-grid {
+        grid-template-columns: 1fr; /* Одна колонка на мобильных устройствах */
+    }
+    .total-points {
+        grid-column: span 1; /* Центральный блок занимает одну колонку на мобильных */
     }
 }

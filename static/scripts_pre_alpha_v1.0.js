@@ -2,6 +2,11 @@ document.addEventListener('DOMContentLoaded', function() {
     loadFaculties();
     updateFacultyPoints();
     loadUsers();
+     // Добавляем новый обработчик для выпадающего списка факультетов
+    document.getElementById('faculty-select').addEventListener('change', function() {
+        // Вызываем новую функцию для загрузки баллов выбранного факультета
+        loadSelectedFacultyPoints(this.value);
+    });
 });
 
 function loadFaculties() {
@@ -182,3 +187,20 @@ function loadUsers() {
         .catch(error => console.error('Ошибка при загрузке пользователей:', error));
 }
 
+// Эта функция будет вызываться при выборе факультета из выпадающего списка
+function loadSelectedFacultyPoints(facultyId) {
+    if (!facultyId) return; // Если ID факультета не выбран, ничего не делаем
+
+    fetch(`/get_faculty_points_by_id/${facultyId}`)
+        .then(response => response.json())
+        .then(data => {
+            // Обновляем информацию о баллах на странице
+            document.getElementById('faculty-name').textContent = data.name;
+            document.getElementById('total-points').textContent = data.total_points;
+            document.getElementById('courage-points').textContent = data.courage;
+            document.getElementById('resourcefulness-points').textContent = data.resourcefulness;
+            document.getElementById('kindness-points').textContent = data.kindness;
+            document.getElementById('sports-points').textContent = data.sports;
+        })
+        .catch(error => console.error('Ошибка:', error));
+}

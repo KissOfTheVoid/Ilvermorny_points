@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Страница Баллов Факультетов | Ильверморни</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style_pre_alpha.css') }}">
+</head>
+<body>
+    <div class="faculty-points-container">
+        <div class="faculty-select-dropdown">
+            <label for="faculty-select">Выбор факультета:</label>
+            <select id="faculty-select">
+                <!-- Здесь будут добавлены факультеты через JavaScript -->
+            </select>
+        </div>
+        <div class="points-grid">
+            <div class="points-block courage">
+                <h3>Смелость</h3>
+                <p id="courage-points">0</p>
+            </div>
+            <div class="points-block resourcefulness">
+                <h3>Находчивость</h3>
+                <p id="resourcefulness-points">0</p>
+            </div>
+            <div class="points-block total-points">
+                <h3 id="faculty-name">Название факультета</h3>
+                <p id="total-points">0</p>
+            </div>
+            <div class="points-block kindness">
+                <h3>Доброта</h3>
+                <p id="kindness-points">0</p>
+            </div>
+            <div class="points-block sports">
+                <h3>Спорт</h3>
+                <p id="sports-points">0</p>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='scripts_pre_alpha_v1.0.js') }}"></script>
+</body>
+</html>

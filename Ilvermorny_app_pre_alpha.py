@@ -354,9 +354,46 @@ def get_users():
     return jsonify(users)
 
 
+@app.route('/get_faculty_points_by_id/<int:faculty_id>', methods=['GET'])
+def get_faculty_points_by_id(faculty_id):
+    conn = psycopg2.connect(f"dbname={DB_NAME} user={DB_USER} password={DB_PASSWORD}")
+    cursor = conn.cursor()
+
+    # Запрос к базе данных для получения информации о баллах факультета
+    cursor.execute("""
+        SELECT name, total_points, courage, resourcefulness, kindness, sports
+        FROM faculties
+        WHERE id = %s
+    """, (faculty_id,))
+
+    faculty_data = cursor.fetchone()
+    cursor.close()
+    conn.close()
+
+    if faculty_data:
+        # Создание словаря для JSON-ответа
+        points_data = {
+            'name': faculty_data[0],
+            'total_points': faculty_data[1],
+            'courage': faculty_data[2],
+            'resourcefulness': faculty_data[3],
+            'kindness': faculty_data[4],
+            'sports': faculty_data[5]
+        }
+        return jsonify(points_data), 200
+    else:
+        # Если факультет не найден, вернуть ошибку
+        return jsonify({'error': 'Факультет не найден'}), 404
+
+
 @app.route('/')
 def index():
     return render_template('Ilvermorny_front_pre_alpha.html')
+
+
+@app.route('/display_points')
+def display_points():
+    return render_template('faculty_points_page.html')
 
 
 @app.route('/staff_actions')
