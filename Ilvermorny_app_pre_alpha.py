@@ -128,8 +128,6 @@ def check_or_create_database():
 
 
 def create_db_dump():
-    check_or_create_database()
-
     try:
         subprocess.run(["pg_dump", "-U", DB_USER, "--data-only", "-f", "db_dump.sql", DB_NAME])
         app.logger.info("Дамп базы данных создан успешно")
