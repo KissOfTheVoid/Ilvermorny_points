@@ -203,7 +203,7 @@ function exportTransactions() {
         });
 }
 
-// Функция для загрузки пользователей
+
 function loadUsers() {
     fetch('/get_users', { headers: headers })
         .then(response => response.json())
@@ -212,10 +212,11 @@ function loadUsers() {
             select.innerHTML = '<option value="">--Выберите волшебника--</option>';
             users.forEach(user => {
                 const option = document.createElement('option');
-                option.value = `${user[0]} ${user[1]}`;
-                option.text = `${user[0]} ${user[1]}`;
+                option.value = `${user.name} ${user.surname}`;
+                option.text = `${user.name} ${user.surname}`;
                 select.appendChild(option);
             });
         })
         .catch(error => console.error('Ошибка при загрузке пользователей:', error));
 }
+
