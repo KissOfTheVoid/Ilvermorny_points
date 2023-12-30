@@ -1,42 +1,54 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Действия персонала</title>
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='favicon/apple-touch-icon.png') }}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon/favicon-32x32.png') }}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon/favicon-16x16.png') }}">
-    <link rel="manifest" href="{{ url_for('static', filename='favicon/site.webmanifest') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style_pre_alpha.css') }}"> <!-- Ссылка на CSS -->
-</head>
-<body>
-    <div id="staff-actions-container">
-        <h2>Лог действий волшебников</h2>
-        <label for="wizard-select">Выберите волшебника:</label>
-        <select id="wizard-select" name="wizard">
-            <option value="">--Выберите волшебника--</option>
-            <!-- Опции будут добавлены динамически -->
-        </select>
-        <button onclick="loadTransactions()">Показать лог</button>
-        <button onclick="exportTransactions()">Скачать лог в формате XLSX</button>
+{% extends "bootstrap/base.html" %}
 
-        <table id="transactions-log">
-            <thead>
-                <tr>
-                    <th>Дата</th>
-                    <th>Факультет</th>
-                    <th>Очки</th>
-                    <th>Тип очков</th> <!-- Название на русском -->
-                    <th>Отправитель</th>
-                </tr>
-            </thead>
-            <tbody>
-            <!-- Данные будут добавлены здесь -->
-            </tbody>
-        </table>
+{% block title %}Действия персонала{% endblock %}
+
+{% block head %}
+{{ super() }}
+<link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='favicon/apple-touch-icon.png') }}">
+<link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon/favicon-32x32.png') }}">
+<link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon/favicon-16x16.png') }}">
+<link rel="manifest" href="{{ url_for('static', filename='favicon/site.webmanifest') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style_pre_alpha.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            Лог действий волшебников
+        </div>
+        <div class="card-body">
+            <div class="mb-3">
+                <label for="wizard-select" class="form-label">Выберите волшебника:</label>
+                <select id="wizard-select" name="wizard" class="form-select">
+                    <option value="">--Выберите волшебника--</option>
+                    <!-- Опции будут добавлены динамически -->
+                </select>
+            </div>
+            <button onclick="loadTransactions()" class="btn btn-primary">Показать лог</button>
+            <button onclick="exportTransactions()" class="btn btn-success">Скачать лог в формате XLSX</button>
+
+            <table id="transactions-log" class="table mt-3">
+                <thead>
+                    <tr>
+                        <th scope="col">Дата</th>
+                        <th scope="col">Факультет</th>
+                        <th scope="col">Очки</th>
+                        <th scope="col">Тип очков</th>
+                        <th scope="col">Отправитель</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <!-- Данные будут добавлены здесь -->
+                </tbody>
+            </table>
+        </div>
     </div>
-    <script>
-        const CUSTOM_HEADER_VALUE = "{{ custom_header_value }}";
-    </script>
-    <script src="{{ url_for('static', filename='scripts_pre_alpha_v1.0.js') }}"></script> <!-- Подключение JavaScript -->
-</body>
-</html>
+</div>
+<script>
+    const CUSTOM_HEADER_VALUE = "{{ custom_header_value }}";
+</script>
+<script src="{{ url_for('static', filename='js/scripts_pre_alpha_v1.0.js') }}"></script>
+
+
+{% endblock %}

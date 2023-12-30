@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify, abort, render_template, send_file
 from flask_sqlalchemy import SQLAlchemy
+from flask_bootstrap import Bootstrap
 import os
 import io
 import logging
@@ -39,6 +40,7 @@ class PointsTransaction(db.Model):
 
 def create_app():
     app = Flask(__name__)
+    Bootstrap(app)
 
     with open("config.yaml", "r") as yamlfile:
         cfg = yaml.safe_load(yamlfile)

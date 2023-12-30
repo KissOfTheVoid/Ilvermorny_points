@@ -1,20 +1,41 @@
-// Событие, вызываемое после полной загрузки DOM
 document.addEventListener('DOMContentLoaded', function() {
-    loadFaculties(); // Загрузка списка факультетов
-    updateFacultyPoints(); // Обновление баллов факультетов
-    loadUsers(); // Загрузка пользователей
+    // Проверяем наличие элемента #faculty-select перед загрузкой факультетов
+    if (document.getElementById('faculty-select')) {
+        loadFaculties();
+        document.getElementById('faculty-select').addEventListener('change', function() {
+            loadSelectedFacultyPoints(this.value);
+        });
+    }
 
-    // Добавляем обработчик для изменения выбранного факультета
-    document.getElementById('faculty-select').addEventListener('change', function() {
-        loadSelectedFacultyPoints(this.value); // Загрузка баллов выбранного факультета
-    });
+    // Проверяем наличие элемента #wizard-select перед загрузкой волшебников
+    if (document.getElementById('wizard-select')) {
+        loadUsers();
+    }
+
+    // Эта функция должна быть вызвана только если на странице есть соответствующие элементы для отображения баллов факультетов
+    if (document.querySelector('.faculty-points-container')) {
+        updateFacultyPoints();
+    }
 });
+
 
 // Заголовки для всех запросов
 const headers = {
     'Content-Type': 'application/json',
     'X-Custom-Security-Header': CUSTOM_HEADER_VALUE // Заголовок для безопасности
 };
+
+
+// Функция для сортировки элементов выпадающего списка
+function sortSelectOptions(selectElement) {
+    let options = Array.from(selectElement.options);
+    options.sort((a, b) => a.text.localeCompare(b.text));
+
+    // Удаляем существующие опции и добавляем отсортированные
+    selectElement.innerHTML = '';
+    options.forEach(option => selectElement.appendChild(option));
+}
+
 
 // Функция для загрузки списка факультетов
 function loadFaculties() {
@@ -29,6 +50,7 @@ function loadFaculties() {
                 option.textContent = faculty.name;
                 select.appendChild(option);
             });
+            sortSelectOptions(select); // Сортируем элементы выпадающего списка
             // Автоматическая загрузка данных для первого факультета
             if (data.length > 0) {
                 select.value = data[0].id; // Устанавливаем первый факультет выбранным
@@ -216,6 +238,7 @@ function loadUsers() {
                 option.text = `${user.name} ${user.surname}`;
                 select.appendChild(option);
             });
+            sortSelectOptions(select); // Сортируем элементы выпадающего списка
         })
         .catch(error => console.error('Ошибка при загрузке пользователей:', error));
 }
