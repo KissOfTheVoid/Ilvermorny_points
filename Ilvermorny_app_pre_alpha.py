@@ -43,7 +43,6 @@ def create_app():
     with open("config.yaml", "r") as yamlfile:
         cfg = yaml.safe_load(yamlfile)
 
-    # Используем форматирование строк с .format() вместо f-строки
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://{user}:{password}@localhost/{dbname}'.format(
         user=cfg['database']['user'],
         password=cfg['database']['password'],
@@ -79,12 +78,22 @@ def require_security_header(f):
     return decorated_function
 
 
+def add_initial_faculty_data():
+    faculties = ['Вампус', 'Пакваджи', 'Птица Гром', 'Рогатый змей']
+    for faculty_name in faculties:
+        if not Faculty.query.filter_by(name=faculty_name).first():
+            new_faculty = Faculty(name=faculty_name)
+            db.session.add(new_faculty)
+    db.session.commit()
+
+
 def check_or_create_database():
     try:
         db.create_all()
-        app.logger.info("Таблицы успешно созданы")
+        add_initial_faculty_data()  # Добавление начальных данных факультетов
+        app.logger.info("Таблицы и начальные данные успешно созданы")
     except Exception as e:
-        app.logger.error(f"Ошибка при создании таблиц: {e}")
+        app.logger.error(f"Ошибка при создании таблиц или начальных данных: {e}")
 
 
 def create_db_dump(db_user, db_name):
