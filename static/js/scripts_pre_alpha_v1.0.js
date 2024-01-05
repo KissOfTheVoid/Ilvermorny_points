@@ -1,10 +1,14 @@
 document.addEventListener('DOMContentLoaded', function() {
+    var path = window.location.pathname;
+    var page = path.split("/").pop();
     // Проверяем наличие элемента #faculty-select перед загрузкой факультетов
     if (document.getElementById('faculty-select')) {
         loadFaculties();
-        document.getElementById('faculty-select').addEventListener('change', function() {
+        if (page == 'display_points') {
+            document.getElementById('faculty-select').addEventListener('change', function() {
             loadSelectedFacultyPoints(this.value);
         });
+        }
     }
 
     // Проверяем наличие элемента #wizard-select перед загрузкой волшебников
@@ -13,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Эта функция должна быть вызвана только если на странице есть соответствующие элементы для отображения баллов факультетов
-    if (document.querySelector('.faculty-points-container')) {
+    if (document.querySelector(page == '')) {
         updateFacultyPoints();
     }
 });
@@ -39,6 +43,8 @@ function sortSelectOptions(selectElement) {
 
 // Функция для загрузки списка факультетов
 function loadFaculties() {
+    var path = window.location.pathname;
+    var page = path.split("/").pop();
     fetch('/faculties', { headers: headers })
         .then(response => response.json())
         .then(data => {
@@ -54,7 +60,8 @@ function loadFaculties() {
             // Автоматическая загрузка данных для первого факультета
             if (data.length > 0) {
                 select.value = data[0].id; // Устанавливаем первый факультет выбранным
-                loadSelectedFacultyPoints(data[0].id); // Загрузка данных для первого факультета
+                if (page == 'display_points'){
+                    loadSelectedFacultyPoints(data[0].id);} // Загрузка данных для первого факультета
             }
         })
         .catch(error => console.error('Ошибка:', error));
@@ -101,6 +108,7 @@ function loadSelectedFacultyPoints(facultyId) {
             document.getElementById('resourcefulness-points').textContent = data.resourcefulness;
             document.getElementById('kindness-points').textContent = data.kindness;
             document.getElementById('sports-points').textContent = data.sports;
+
         })
         .catch(error => console.error('Ошибка:', error));
 }
